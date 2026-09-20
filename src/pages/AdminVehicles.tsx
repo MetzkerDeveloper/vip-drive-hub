@@ -185,29 +185,35 @@ const AdminVehicles = () => {
           </div>
         )}
 
+        <VehicleFilters filters={filters} onChange={setFilters} years={years} />
+
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, i) => <VehicleCardSkeleton key={i} />)}
+            {Array.from({ length: PAGE_SIZE }).map((_, i) => <VehicleCardSkeleton key={i} />)}
           </div>
-        ) : vehicles && vehicles.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {vehicles.map((v) => (
-              <div key={v.id} className="relative group">
-                <VehicleCard vehicle={v} />
-                <div className="absolute top-3 left-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={() => openEdit(v)} className="bg-card/90 hover:bg-card p-2 rounded-lg shadow-md border border-border/50 text-secondary">
-                    <Pencil className="h-4 w-4" />
-                  </button>
-                  <button onClick={() => deleteMutation.mutate(v.id)} className="bg-card/90 hover:bg-card p-2 rounded-lg shadow-md border border-border/50 text-destructive">
-                    <Trash2 className="h-4 w-4" />
-                  </button>
+        ) : pageItems.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {pageItems.map((v) => (
+                <div key={v.id} className="relative group">
+                  <VehicleCard vehicle={v} />
+                  <div className="absolute top-3 left-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onClick={() => openEdit(v)} className="bg-card/90 hover:bg-card p-2 rounded-lg shadow-md border border-border/50 text-secondary">
+                      <Pencil className="h-4 w-4" />
+                    </button>
+                    <button onClick={() => deleteMutation.mutate(v.id)} className="bg-card/90 hover:bg-card p-2 rounded-lg shadow-md border border-border/50 text-destructive">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+            <PaginationControls page={page} totalPages={totalPages} onPageChange={setPage} />
+          </>
         ) : (
-          <p className="text-center text-muted-foreground py-16">Nenhum veículo cadastrado.</p>
+          <p className="text-center text-muted-foreground py-16">Nenhum veículo encontrado.</p>
         )}
+
       </div>
     </div>
   );
