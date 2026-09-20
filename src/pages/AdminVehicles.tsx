@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -11,6 +11,10 @@ import { toast } from 'sonner';
 import { Plus, Pencil, Trash2, X, Loader2, Upload } from 'lucide-react';
 import VehicleCard from '@/components/VehicleCard';
 import VehicleCardSkeleton from '@/components/VehicleCardSkeleton';
+import VehicleFilters, { applyVehicleFilters, defaultFilters, type VehicleFilterState } from '@/components/VehicleFilters';
+import PaginationControls from '@/components/PaginationControls';
+
+const PAGE_SIZE = 6;
 
 const AdminVehicles = () => {
   const navigate = useNavigate();
@@ -20,6 +24,9 @@ const AdminVehicles = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [form, setForm] = useState({ name: '', year: '', km: '', description: '' });
   const [saving, setSaving] = useState(false);
+  const [filters, setFilters] = useState<VehicleFilterState>(defaultFilters);
+  const [page, setPage] = useState(1);
+
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -35,6 +42,18 @@ const AdminVehicles = () => {
       return data as Vehicle[];
     },
   });
+
+  const years = useMemo(
+    () => Array.from(new Set((vehicles ?? []).map((v) => v.year))).sort((a, b) => b - a),
+    [vehicles],
+  );
+  const filtered = useMemo(() => applyVehicleFilters(vehicles ?? [], filters), [vehicles, filters]);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  useEffect(() => { setPage(1); }, [filters]);
+  useEffect(() => { if (page > totalPages) setPage(totalPages); }, [page, totalPages]);
+  const pageItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -166,29 +185,35 @@ const AdminVehicles = () => {
           </div>
         )}
 
+        <VehicleFilters filters={filters} onChange={setFilters} years={years} />
+
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, i) => <VehicleCardSkeleton key={i} />)}
+            {Array.from({ length: PAGE_SIZE }).map((_, i) => <VehicleCardSkeleton key={i} />)}
           </div>
-        ) : vehicles && vehicles.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {vehicles.map((v) => (
-              <div key={v.id} className="relative group">
-                <VehicleCard vehicle={v} />
-                <div className="absolute top-3 left-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={() => openEdit(v)} className="bg-card/90 hover:bg-card p-2 rounded-lg shadow-md border border-border/50 text-secondary">
-                    <Pencil className="h-4 w-4" />
-                  </button>
-                  <button onClick={() => deleteMutation.mutate(v.id)} className="bg-card/90 hover:bg-card p-2 rounded-lg shadow-md border border-border/50 text-destructive">
-                    <Trash2 className="h-4 w-4" />
-                  </button>
+        ) : pageItems.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {pageItems.map((v) => (
+                <div key={v.id} className="relative group">
+                  <VehicleCard vehicle={v} />
+                  <div className="absolute top-3 left-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onClick={() => openEdit(v)} className="bg-card/90 hover:bg-card p-2 rounded-lg shadow-md border border-border/50 text-secondary">
+                      <Pencil className="h-4 w-4" />
+                    </button>
+                    <button onClick={() => deleteMutation.mutate(v.id)} className="bg-card/90 hover:bg-card p-2 rounded-lg shadow-md border border-border/50 text-destructive">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+            <PaginationControls page={page} totalPages={totalPages} onPageChange={setPage} />
+          </>
         ) : (
-          <p className="text-center text-muted-foreground py-16">Nenhum veículo cadastrado.</p>
+          <p className="text-center text-muted-foreground py-16">Nenhum veículo encontrado.</p>
         )}
+
       </div>
     </div>
   );

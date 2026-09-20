@@ -8,6 +8,8 @@ import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/AdminLogin";
 import AdminVehicles from "./pages/AdminVehicles";
 import AdminContacts from "./pages/AdminContacts";
+import VehicleDetail from "./pages/VehicleDetail";
+
 
 const queryClient = new QueryClient();
 
@@ -19,6 +21,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/veiculo/:id" element={<VehicleDetail />} />
+
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/vehicles" element={<AdminVehicles />} />
           <Route path="/admin/contacts" element={<AdminContacts />} />
