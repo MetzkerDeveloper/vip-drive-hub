@@ -43,6 +43,18 @@ const AdminVehicles = () => {
     },
   });
 
+  const years = useMemo(
+    () => Array.from(new Set((vehicles ?? []).map((v) => v.year))).sort((a, b) => b - a),
+    [vehicles],
+  );
+  const filtered = useMemo(() => applyVehicleFilters(vehicles ?? [], filters), [vehicles, filters]);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  useEffect(() => { setPage(1); }, [filters]);
+  useEffect(() => { if (page > totalPages) setPage(totalPages); }, [page, totalPages]);
+  const pageItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+
+
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase.from('vehicles').delete().eq('id', id);
