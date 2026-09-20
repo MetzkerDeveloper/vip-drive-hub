@@ -1,17 +1,20 @@
 import { Car } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import type { Vehicle } from '@/types/database';
 
 interface VehicleCardProps {
   vehicle: Vehicle;
+  linkToDetail?: boolean;
 }
 
 const formatKm = (km: number) => {
   return km.toLocaleString('pt-BR') + ' km';
 };
 
-const VehicleCard = ({ vehicle }: VehicleCardProps) => {
-  return (
-    <div className="group bg-card rounded-xl overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-1 border border-border/50">
+const VehicleCard = ({ vehicle, linkToDetail = false }: VehicleCardProps) => {
+  const content = (
+    <div className="group bg-card rounded-xl overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-1 border border-border/50 h-full">
+
       <div className="relative aspect-[4/3] bg-muted overflow-hidden">
         {vehicle.image_url ? (
           <img
