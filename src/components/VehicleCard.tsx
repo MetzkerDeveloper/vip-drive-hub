@@ -42,6 +42,17 @@ const VehicleCard = ({ vehicle, linkToDetail = false }: VehicleCardProps) => {
       </div>
     </div>
   );
+
+  if (linkToDetail) {
+    return (
+      <Link to={`/veiculo/${vehicle.id}`} className="block h-full">
+        {content}
+      </Link>
+    );
+  }
+
+  return content;
 };
+
 
 export default VehicleCard;
