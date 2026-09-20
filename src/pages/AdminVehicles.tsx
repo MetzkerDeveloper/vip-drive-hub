@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -11,6 +11,10 @@ import { toast } from 'sonner';
 import { Plus, Pencil, Trash2, X, Loader2, Upload } from 'lucide-react';
 import VehicleCard from '@/components/VehicleCard';
 import VehicleCardSkeleton from '@/components/VehicleCardSkeleton';
+import VehicleFilters, { applyVehicleFilters, defaultFilters, type VehicleFilterState } from '@/components/VehicleFilters';
+import PaginationControls from '@/components/PaginationControls';
+
+const PAGE_SIZE = 6;
 
 const AdminVehicles = () => {
   const navigate = useNavigate();
@@ -20,6 +24,9 @@ const AdminVehicles = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [form, setForm] = useState({ name: '', year: '', km: '', description: '' });
   const [saving, setSaving] = useState(false);
+  const [filters, setFilters] = useState<VehicleFilterState>(defaultFilters);
+  const [page, setPage] = useState(1);
+
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
