@@ -8,6 +8,8 @@ import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/AdminLogin";
 import AdminVehicles from "./pages/AdminVehicles";
 import AdminContacts from "./pages/AdminContacts";
+import VehicleDetail from "./pages/VehicleDetail";
+
 
 const queryClient = new QueryClient();
 
