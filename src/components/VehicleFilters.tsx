@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, X, SlidersHorizontal } from 'lucide-react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 
 export interface VehicleFilterState {
   search: string;
