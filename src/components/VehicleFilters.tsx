@@ -1,6 +1,7 @@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, X } from 'lucide-react';
+import { Search, X, SlidersHorizontal } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 export interface VehicleFilterState {
   search: string;
@@ -34,6 +35,7 @@ const selectClass =
 
 const VehicleFilters = ({ filters, onChange, years, priceLimit = 500000 }: Props) => {
   const set = (patch: Partial<VehicleFilterState>) => onChange({ ...filters, ...patch });
+  const priceActive = filters.minPrice !== '' || filters.maxPrice !== '';
   const isDirty =
     filters.search !== '' || filters.year !== '' || filters.maxKm !== '' || filters.sort !== 'recent' || filters.availability !== 'all' || filters.minPrice !== '' || filters.maxPrice !== '';
 
@@ -105,11 +107,21 @@ const VehicleFilters = ({ filters, onChange, years, priceLimit = 500000 }: Props
       </div>
 
 
-      <div className="mt-5 rounded-2xl border border-border/70 bg-muted/30 p-4">
-        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-          <label className="text-sm font-bold text-primary">Faixa de preço</label>
-          <span className="text-xs text-muted-foreground">Arraste os controles ou digite os valores</span>
-        </div>
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button type="button" variant="outline" className="gap-2">
+              <SlidersHorizontal className="h-4 w-4" />
+              Filtrar por preço
+              {priceActive && <span className="ml-1 rounded-full bg-secondary px-2 py-0.5 text-xs text-white">Ativo</span>}
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Faixa de preço</DialogTitle>
+              <DialogDescription>Arraste os controles ou digite os valores mínimo e máximo.</DialogDescription>
+            </DialogHeader>
+          <div className="space-y-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <label className="text-xs font-semibold text-muted-foreground">Valor mínimo (R$)
             <Input aria-label="Preço mínimo" inputMode="numeric" className="mt-1" placeholder="Sem mínimo" value={filters.minPrice} onChange={e => set({ minPrice: e.target.value.replace(/\D/g, '') })} />
@@ -127,6 +139,15 @@ const VehicleFilters = ({ filters, onChange, years, priceLimit = 500000 }: Props
           </label>
         </div>
         {filters.minPrice && filters.maxPrice && Number(filters.minPrice) > Number(filters.maxPrice) && <p className="mt-3 text-sm text-destructive">O valor mínimo não pode superar o máximo.</p>}
+      </div>
+
+            <div className="flex flex-wrap justify-end gap-2 pt-3">
+              <Button type="button" variant="ghost" onClick={() => set({ minPrice: '', maxPrice: '' })}>Limpar preço</Button>
+              <DialogClose asChild><Button type="button">Ver veículos</Button></DialogClose>
+            </div>
+          </DialogContent>
+        </Dialog>
+        {priceActive && <span className="text-xs text-muted-foreground">{filters.minPrice ? `De R$ ${Number(filters.minPrice).toLocaleString('pt-BR')}` : 'Sem mínimo'} · {filters.maxPrice ? `Até R$ ${Number(filters.maxPrice).toLocaleString('pt-BR')}` : 'Sem máximo'}</span>}
       </div>
 
       {isDirty && (
