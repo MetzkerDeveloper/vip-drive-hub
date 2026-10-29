@@ -1,6 +1,7 @@
 import { Car } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { Vehicle } from '@/types/database';
+import SoldRibbon from './SoldRibbon';
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -20,7 +21,7 @@ const VehicleCard = ({ vehicle, linkToDetail = false }: VehicleCardProps) => {
           <img
             src={vehicle.image_url}
             alt={vehicle.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${vehicle.is_sold ? 'grayscale-[35%]' : ''}`}
             loading="lazy"
           />
         ) : (
@@ -29,6 +30,7 @@ const VehicleCard = ({ vehicle, linkToDetail = false }: VehicleCardProps) => {
             <span className="text-sm font-medium">Em breve</span>
           </div>
         )}
+        {vehicle.is_sold && <SoldRibbon />}
         <div className="absolute top-3 right-3 bg-primary/90 text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
           {vehicle.year}
         </div>

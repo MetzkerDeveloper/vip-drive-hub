@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { Vehicle } from '@/types/database';
+import SoldRibbon from '@/components/SoldRibbon';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -92,7 +93,8 @@ const VehicleDetail = () => {
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
               <div className="bg-card rounded-xl overflow-hidden border border-border/50 shadow-[var(--shadow-card)]">
-                <div className="aspect-[4/3] bg-muted">
+                <div className="relative aspect-[4/3] bg-muted overflow-hidden">
+                  {vehicle.is_sold && <SoldRibbon />}
                   {vehicle.image_url ? (
                     <img src={vehicle.image_url} alt={vehicle.name} className="w-full h-full object-cover" loading="lazy" />
                   ) : (
@@ -107,6 +109,7 @@ const VehicleDetail = () => {
               <div className="space-y-6">
                 <div>
                   <h1 className="text-3xl font-bold text-foreground mb-3">{vehicle.name}</h1>
+                  {vehicle.is_sold && <p className="mb-3 font-semibold text-destructive">Este veículo já foi vendido.</p>}
                   <div className="flex flex-wrap gap-3">
                     <span className="inline-flex items-center gap-2 bg-primary text-primary-foreground text-sm font-semibold px-3 py-1.5 rounded-full">
                       <Calendar className="h-4 w-4" /> {vehicle.year}
@@ -124,7 +127,7 @@ const VehicleDetail = () => {
                   </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-4 bg-card p-6 rounded-xl border border-border/50 shadow-[var(--shadow-card)]">
+                {!vehicle.is_sold && <form onSubmit={handleSubmit} className="space-y-4 bg-card p-6 rounded-xl border border-border/50 shadow-[var(--shadow-card)]">
                   <h2 className="text-lg font-bold text-card-foreground">Tenho interesse</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -147,7 +150,7 @@ const VehicleDetail = () => {
                   <Button type="submit" className="w-full" size="lg" disabled={loading}>
                     {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : (<><Send className="h-4 w-4" /> Enviar Mensagem</>)}
                   </Button>
-                </form>
+                </form>}
               </div>
             </div>
           )}

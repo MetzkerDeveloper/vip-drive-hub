@@ -14,6 +14,12 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_users: {
+        Row: { user_id: string; created_at: string }
+        Insert: { user_id: string; created_at?: string }
+        Update: { user_id?: string; created_at?: string }
+        Relationships: []
+      }
       contacts: {
         Row: {
           created_at: string
@@ -51,6 +57,7 @@ export type Database = {
           id: string
           image_url: string | null
           km: number
+          is_sold: boolean
           name: string
           updated_at: string
           year: number
@@ -61,6 +68,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           km?: number
+          is_sold?: boolean
           name: string
           updated_at?: string
           year: number
@@ -71,6 +79,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           km?: number
+          is_sold?: boolean
           name?: string
           updated_at?: string
           year?: number
