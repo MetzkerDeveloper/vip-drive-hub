@@ -15,7 +15,7 @@ import { ArrowLeft, Car, Calendar, Gauge, Send, Loader2 } from 'lucide-react';
 const VehicleDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
 
   const { data: vehicle, isLoading, isError } = useQuery({
     queryKey: ['vehicle', id],
@@ -51,6 +51,7 @@ const VehicleDetail = () => {
       {
         name: form.name,
         email: form.email,
+        phone: form.phone,
         message: form.message,
         vehicle_interest: vehicle ? `${vehicle.name} ${vehicle.year}` : null,
       },
@@ -60,7 +61,7 @@ const VehicleDetail = () => {
       toast.error('Erro ao enviar. Tente novamente.');
     } else {
       toast.success('Mensagem enviada com sucesso!');
-      setForm({ name: '', email: '', message: '' });
+      setForm({ name: '', email: '', phone: '', message: '' });
     }
   };
 
@@ -134,6 +135,10 @@ const VehicleDetail = () => {
                       <label className="text-sm font-medium text-card-foreground mb-1.5 block">Email *</label>
                       <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="seu@email.com" maxLength={255} required />
                     </div>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-card-foreground mb-1.5 block">Telefone</label>
+                    <Input type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="(11) 99999-9999" maxLength={20} />
                   </div>
                   <div>
                     <label className="text-sm font-medium text-card-foreground mb-1.5 block">Mensagem *</label>

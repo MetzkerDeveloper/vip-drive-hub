@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { Contact } from '@/types/database';
 import Navbar from '@/components/Navbar';
-import { Mail, User, Car, MessageSquare, Calendar } from 'lucide-react';
+import { Mail, User, Car, MessageSquare, Calendar, Phone } from 'lucide-react';
 
 const AdminContacts = () => {
   const navigate = useNavigate();
@@ -59,6 +59,12 @@ const AdminContacts = () => {
                     <Mail className="h-4 w-4 text-secondary" />
                     <span>{contact.email}</span>
                   </div>
+                  {contact.phone && (
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Phone className="h-4 w-4 text-secondary" />
+                      <span>{contact.phone}</span>
+                    </div>
+                  )}
                   {contact.vehicle_interest && (
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Car className="h-4 w-4 text-secondary" />
