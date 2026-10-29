@@ -36,7 +36,8 @@ const ContactSection = () => {
   return (
     <section id="contato" className="bg-white py-20 md:py-28">
       <div className="container mx-auto px-4 max-w-4xl">
-        <p className="section-eyebrow mb-4">FALE COM A VIP</p>\n        <h2 className="max-w-2xl text-3xl md:text-5xl font-black tracking-tight text-primary mb-4">
+        <p className="section-eyebrow mb-4">FALE COM A VIP</p>
+        <h2 className="max-w-2xl text-3xl md:text-5xl font-black tracking-tight text-primary mb-4">
           Vamos conversar sobre seu próximo veículo?
         </h2>
         <p className="text-muted-foreground mb-12">
