@@ -22,7 +22,7 @@ const AdminVehicles = () => {
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Vehicle | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [form, setForm] = useState({ name: '', year: '', km: '', description: '' });
+  const [form, setForm] = useState({ name: '', year: '', km: '', description: '', is_sold: false });
   const [saving, setSaving] = useState(false);
   const [filters, setFilters] = useState<VehicleFilterState>(defaultFilters);
   const [page, setPage] = useState(1);
@@ -77,6 +77,7 @@ const AdminVehicles = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-vehicles'] });
+      queryClient.invalidateQueries({ queryKey: ['vehicles'] });
       toast.success('Veículo excluído!');
     },
     onError: () => toast.error('Erro ao excluir.'),
@@ -84,14 +85,14 @@ const AdminVehicles = () => {
 
   const openEdit = (v: Vehicle) => {
     setEditing(v);
-    setForm({ name: v.name, year: String(v.year), km: String(v.km), description: v.description || '' });
+    setForm({ name: v.name, year: String(v.year), km: String(v.km), description: v.description || '', is_sold: v.is_sold });
     setImageFile(null);
     setShowForm(true);
   };
 
   const openNew = () => {
     setEditing(null);
-    setForm({ name: '', year: '', km: '', description: '' });
+    setForm({ name: '', year: '', km: '', description: '', is_sold: false });
     setImageFile(null);
     setShowForm(true);
   };
@@ -126,6 +127,7 @@ const AdminVehicles = () => {
       km: parseInt(form.km.replace(/\D/g, '')),
       description: form.description || null,
       image_url,
+      is_sold: form.is_sold,
     };
 
     if (editing) {
@@ -148,8 +150,11 @@ const AdminVehicles = () => {
     <div className="min-h-screen bg-muted/50">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold text-foreground">Gestão de Veículos</h1>
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground">Gestão de Veículos</h1>
+            <p className="text-sm text-muted-foreground mt-1">Gerencie os anúncios e a disponibilidade do estoque.</p>
+          </div>
           <Button onClick={openNew}><Plus className="h-4 w-4" /> Novo Veículo</Button>
         </div>
 
@@ -193,6 +198,19 @@ const AdminVehicles = () => {
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => setImageFile(e.target.files?.[0] || null)} />
                   </label>
                 </div>
+                <label className="flex items-center justify-between rounded-lg border border-border bg-muted/40 px-4 py-3 cursor-pointer">
+                  <span>
+                    <span className="block text-sm font-semibold text-card-foreground">Disponibilidade</span>
+                    <span className="block text-xs text-muted-foreground">{form.is_sold ? 'Vendido — identificado no catálogo' : 'Disponível para venda'}</span>
+                  </span>
+                  <input
+                    type="checkbox"
+                    checked={form.is_sold}
+                    onChange={(e) => setForm({ ...form, is_sold: e.target.checked })}
+                    className="h-5 w-5 accent-secondary"
+                    aria-label="Marcar veículo como vendido"
+                  />
+                </label>
                 <Button type="submit" className="w-full" disabled={saving}>
                   {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : editing ? 'Salvar Alterações' : 'Cadastrar Veículo'}
                 </Button>
@@ -214,7 +232,7 @@ const AdminVehicles = () => {
                 <div key={v.id} className="relative group">
                   <VehicleCard vehicle={v} />
                   <div className="absolute top-3 left-3 flex gap-2 z-20">
-                    <button onClick={() => openEdit(v)} className="bg-card/90 hover:bg-card p-2 rounded-lg shadow-md border border-border/50 text-secondary">
+                    <button type="button" title="Editar veículo" aria-label="Editar veículo" onClick={() => openEdit(v)} className="bg-card/90 hover:bg-card p-2 rounded-lg shadow-md border border-border/50 text-secondary">
                       <Pencil className="h-4 w-4" />
                     </button>
                     <button
@@ -227,7 +245,7 @@ const AdminVehicles = () => {
                     >
                       {v.is_sold ? <ToggleLeft className="h-4 w-4" /> : <ToggleRight className="h-4 w-4" />}
                     </button>
-                    <button onClick={() => deleteMutation.mutate(v.id)} className="bg-card/90 hover:bg-card p-2 rounded-lg shadow-md border border-border/50 text-destructive">
+                    <button type="button" title="Excluir veículo" aria-label="Excluir veículo" onClick={() => { if (window.confirm("Deseja excluir este veículo definitivamente?")) deleteMutation.mutate(v.id); }} className="bg-card/90 hover:bg-card p-2 rounded-lg shadow-md border border-border/50 text-destructive">
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
