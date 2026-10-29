@@ -18,8 +18,8 @@ const AdminLogin = () => {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (!error) {
-      const { data: admin, error: accessError } = await supabase.from('admin_users').select('user_id').maybeSingle();
-      if (accessError || !admin) {
+      const { data: admin, error: accessError } = await supabase.from('admin_users').select('user_id,is_active').maybeSingle();
+      if (accessError || !admin?.is_active) {
         await supabase.auth.signOut();
         setLoading(false);
         toast.error('Usuário sem permissão administrativa.');
