@@ -1,0 +1,1 @@
+ALTER TABLE public.vehicles ADD COLUMN IF NOT EXISTS price numeric(12,2) NULL CHECK (price >= 0); COMMENT ON COLUMN public.vehicles.price IS 'Preço anunciado em BRL; NULL para consultar valor.';
