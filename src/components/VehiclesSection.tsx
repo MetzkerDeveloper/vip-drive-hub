@@ -45,19 +45,19 @@ const VehiclesSection = () => {
   const pageItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
-    <section id="veiculos" className="py-20 bg-muted/50">
+    <section id="veiculos" className="bg-[#f2f6fb] py-20 md:py-28">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center mb-4">
-          Veículos Disponíveis
+        <p className="section-eyebrow mb-4">NOSSO ESTOQUE</p>\n        <h2 className="max-w-2xl text-3xl md:text-5xl font-black tracking-tight text-primary mb-4">
+          Encontre um veículo para chamar de seu.
         </h2>
-        <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
+        <p className="text-muted-foreground mb-10 max-w-2xl">
           Confira nosso estoque de veículos seminovos e usados com procedência garantida.
         </p>
 
         <VehicleFilters filters={filters} onChange={setFilters} years={years} />
 
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
             {Array.from({ length: PAGE_SIZE }).map((_, i) => (
               <VehicleCardSkeleton key={i} />
             ))}
