@@ -69,7 +69,7 @@ const VehicleDetail = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1 bg-muted/50 py-10">
+      <main className="flex-1 bg-[#f2f6fb] py-10 md:py-16">
         <div className="container mx-auto px-4">
           <Link to="/#veiculos" className="inline-flex items-center gap-2 text-sm font-medium text-secondary hover:underline mb-6">
             <ArrowLeft className="h-4 w-4" /> Voltar para os veículos
@@ -92,7 +92,7 @@ const VehicleDetail = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-              <div className="bg-card rounded-xl overflow-hidden border border-border/50 shadow-[var(--shadow-card)]">
+              <div className="premium-card overflow-hidden">
                 <div className="relative aspect-[4/3] bg-muted overflow-hidden">
                   {vehicle.is_sold && <SoldRibbon />}
                   {vehicle.image_url ? (
@@ -108,7 +108,7 @@ const VehicleDetail = () => {
 
               <div className="space-y-6">
                 <div>
-                  <h1 className="text-3xl font-bold text-foreground mb-3">{vehicle.name}</h1>
+                  <h1 className="text-3xl md:text-5xl font-black tracking-tight text-primary mb-4">{vehicle.name}</h1>
                   {vehicle.is_sold && <p className="mb-3 font-semibold text-destructive">Este veículo já foi vendido.</p>}
                   <div className="flex flex-wrap gap-3">
                     <span className="inline-flex items-center gap-2 bg-primary text-primary-foreground text-sm font-semibold px-3 py-1.5 rounded-full">
@@ -121,13 +121,13 @@ const VehicleDetail = () => {
                 </div>
 
                 {vehicle.description && (
-                  <div className="bg-card p-6 rounded-xl border border-border/50 shadow-[var(--shadow-card)]">
+                  <div className="premium-card p-6 md:p-8">
                     <h2 className="text-lg font-bold text-card-foreground mb-2">Sobre o veículo</h2>
                     <p className="text-muted-foreground whitespace-pre-line">{vehicle.description}</p>
                   </div>
                 )}
 
-                {!vehicle.is_sold && <form onSubmit={handleSubmit} className="space-y-4 bg-card p-6 rounded-xl border border-border/50 shadow-[var(--shadow-card)]">
+                {!vehicle.is_sold && <form onSubmit={handleSubmit} className="premium-card space-y-5 p-6 md:p-8">
                   <h2 className="text-lg font-bold text-card-foreground">Tenho interesse</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -141,7 +141,7 @@ const VehicleDetail = () => {
                   </div>
                   <div>
                     <label className="text-sm font-medium text-card-foreground mb-1.5 block">Telefone</label>
-                    <Input type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="(11) 99999-9999" maxLength={20} />
+                    <Input type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="(33) 99999-9999" maxLength={20} />
                   </div>
                   <div>
                     <label className="text-sm font-medium text-card-foreground mb-1.5 block">Mensagem *</label>
