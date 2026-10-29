@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
@@ -8,12 +7,11 @@ import { toast } from 'sonner';
 import { Loader2, Plus, ShieldCheck, UserRound, KeyRound } from 'lucide-react';
 type Member={user_id:string;full_name:string|null;email:string;role:'admin'|'manager';is_active:boolean;created_at:string;last_sign_in_at:string|null};
 export default function AdminUsers(){
- const navigate=useNavigate();
  const [users,setUsers]=useState<Member[]>([]),[busy,setBusy]=useState(false),[show,setShow]=useState(false),[loading,setLoading]=useState(true);
  const [form,setForm]=useState({full_name:'',email:'',password:'',role:'manager'});
  const [passwordTarget,setPasswordTarget]=useState<Member|null>(null),[newPassword,setNewPassword]=useState('');
- const invoke=async(payload:Record<string,unknown>)=>{const {data:{session}}=await supabase.auth.getSession();if(!session)throw Error('Sessão expirada');const {data,error}=await supabase.functions.invoke('manage-users',{body:payload});if(error){const response=(error as {context?:Response}).context;const parsed=await response?.json().catch(()=>null);throw Error(parsed?.error||error.message)}if(data?.error)throw Error(data.error);return data};
- const load=async()=>{setLoading(true);try{const data=await invoke({action:'list'});setUsers(data.users)}catch(e){toast.error((e as Error).message);navigate('/admin/vehicles')}finally{setLoading(false)}};
+ const invoke=async(payload:Record<string,unknown>)=>{const {data:{session}}=await supabase.auth.getSession();if(!session)throw Error('Sessão expirada');const {data,error}=await supabase.functions.invoke('manage-users',{body:payload});if(error){const context=(error as {context?:unknown}).context;let parsed: {error?:string}|null=null; if(context && typeof context==='object' && 'json' in context && typeof (context as Response).json==='function'){try{parsed=await (context as Response).json()}catch{parsed=null}} else if(context && typeof context==='object' && 'error' in context){parsed=context as {error?:string}} throw Error(parsed?.error||error.message||'Não foi possível acessar o serviço de usuários')}if(data?.error)throw Error(data.error);return data};
+ const load=async()=>{setLoading(true);try{const data=await invoke({action:'list'});setUsers(data.users)}catch(e){toast.error((e as Error).message);setUsers([])}finally{setLoading(false)}};
  useEffect(()=>{void load()},[]);
  const execute=async(payload:Record<string,unknown>,message:string)=>{setBusy(true);try{await invoke(payload);toast.success(message);await load();return true}catch(e){toast.error((e as Error).message);return false}finally{setBusy(false)}};
  const submit=async(e:React.FormEvent)=>{e.preventDefault();if(form.password.length<12){toast.error('A senha precisa ter pelo menos 12 caracteres');return}if(await execute({action:'create',...form},'Usuário criado com sucesso')){setShow(false);setForm({full_name:'',email:'',password:'',role:'manager'})}};
