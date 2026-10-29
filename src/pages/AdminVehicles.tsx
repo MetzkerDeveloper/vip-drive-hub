@@ -102,11 +102,13 @@ const AdminVehicles = () => {
     return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   };
 
+  const parsePrice = (raw: string) => Number(raw.trim().replace(/\./g, '').replace(',', '.'));
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
 
-    if (form.price.trim() !== '' && (!Number.isFinite(Number(form.price.replace(',', '.'))) || Number(form.price.replace(',', '.')) < 0)) { toast.error('Informe um preço válido.'); setSaving(false); return; }
+    if (form.price.trim() !== '' && (!Number.isFinite(parsePrice(form.price)) || parsePrice(form.price) < 0)) { toast.error('Informe um preço válido.'); setSaving(false); return; }
     let image_url = editing?.image_url || null;
 
     if (imageFile) {
@@ -127,7 +129,7 @@ const AdminVehicles = () => {
       year: parseInt(form.year),
       km: parseInt(form.km.replace(/\D/g, '')),
       description: form.description || null,
-      price: form.price.trim() === '' ? null : Number(form.price.replace(',', '.')),
+      price: form.price.trim() === '' ? null : parsePrice(form.price),
       image_url,
       is_sold: form.is_sold,
     };
@@ -190,7 +192,7 @@ const AdminVehicles = () => {
                 </div>
                 <div>
                   <label className="text-sm font-medium text-card-foreground mb-1.5 block">Valor do veículo (R$)</label>
-                  <Input inputMode="decimal" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value.replace(/[^0-9,.]/g, "") })} placeholder="Ex: 89900,00 (opcional)" />
+                  <Input inputMode="decimal" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value.replace(/[^0-9,.]/g, "") })} placeholder="Ex: 89.900,00 (opcional)" />
                 </div>
                 <div>
                   <label className="text-sm font-medium text-card-foreground mb-1.5 block">Descrição</label>
