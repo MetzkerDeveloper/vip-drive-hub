@@ -225,7 +225,7 @@ const AdminVehicles = () => {
           </div>
         )}
 
-        <VehicleFilters filters={filters} onChange={setFilters} years={years} />
+        <VehicleFilters filters={filters} onChange={setFilters} years={years} priceLimit={Math.max(50000, Math.ceil(Math.max(...(vehicles ?? []).map(v => v.price ?? 0), 0) / 10000) * 10000)} />
 
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
