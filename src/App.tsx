@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/AdminLogin";
 import AdminVehicles from "./pages/AdminVehicles";
 import AdminContacts from "./pages/AdminContacts";
+import AdminUsers from "./pages/AdminUsers";
 import VehicleDetail from "./pages/VehicleDetail";
 
 
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/vehicles" element={<AdminVehicles />} />
           <Route path="/admin/contacts" element={<AdminContacts />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
