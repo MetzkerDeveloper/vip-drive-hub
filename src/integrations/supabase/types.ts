@@ -15,9 +15,9 @@ export type Database = {
   public: {
     Tables: {
       admin_users: {
-        Row: { user_id: string; created_at: string }
-        Insert: { user_id: string; created_at?: string }
-        Update: { user_id?: string; created_at?: string }
+        Row: { user_id: string; created_at: string; full_name: string | null; role: string; is_active: boolean }
+        Insert: { user_id: string; created_at?: string; full_name?: string | null; role?: string; is_active?: boolean }
+        Update: { user_id?: string; created_at?: string; full_name?: string | null; role?: string; is_active?: boolean }
         Relationships: []
       }
       contacts: {
