@@ -11,6 +11,7 @@ const ContactSection = () => {
   const [form, setForm] = useState({
     name: '',
     email: '',
+    phone: '',
     vehicle_interest: '',
     message: '',
   });
@@ -28,7 +29,7 @@ const ContactSection = () => {
       toast.error('Erro ao enviar. Tente novamente.');
     } else {
       toast.success('Mensagem enviada com sucesso!');
-      setForm({ name: '', email: '', vehicle_interest: '', message: '' });
+      setForm({ name: '', email: '', phone: '', vehicle_interest: '', message: '' });
     }
   };
 
@@ -65,6 +66,16 @@ const ContactSection = () => {
                 required
               />
             </div>
+          </div>
+          <div>
+            <label className="text-sm font-medium text-card-foreground mb-1.5 block">Telefone</label>
+            <Input
+              type="tel"
+              value={form.phone}
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              placeholder="(11) 99999-9999"
+              maxLength={20}
+            />
           </div>
           <div>
             <label className="text-sm font-medium text-card-foreground mb-1.5 block">Veículo de interesse</label>

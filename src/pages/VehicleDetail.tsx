@@ -15,7 +15,7 @@ import { ArrowLeft, Car, Calendar, Gauge, Send, Loader2 } from 'lucide-react';
 const VehicleDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
 
   const { data: vehicle, isLoading, isError } = useQuery({
     queryKey: ['vehicle', id],
