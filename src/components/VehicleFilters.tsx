@@ -8,6 +8,8 @@ export interface VehicleFilterState {
   maxKm: string;
   sort: string;
   availability: string;
+  minPrice: string;
+  maxPrice: string;
 }
 
 export const defaultFilters: VehicleFilterState = {
@@ -16,21 +18,24 @@ export const defaultFilters: VehicleFilterState = {
   maxKm: '',
   sort: 'recent',
   availability: 'all',
+  minPrice: '',
+  maxPrice: '',
 };
 
 interface Props {
   filters: VehicleFilterState;
   onChange: (f: VehicleFilterState) => void;
   years: number[];
+  priceLimit?: number;
 }
 
 const selectClass =
   'h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring';
 
-const VehicleFilters = ({ filters, onChange, years }: Props) => {
+const VehicleFilters = ({ filters, onChange, years, priceLimit = 500000 }: Props) => {
   const set = (patch: Partial<VehicleFilterState>) => onChange({ ...filters, ...patch });
   const isDirty =
-    filters.search !== '' || filters.year !== '' || filters.maxKm !== '' || filters.sort !== 'recent' || filters.availability !== 'all';
+    filters.search !== '' || filters.year !== '' || filters.maxKm !== '' || filters.sort !== 'recent' || filters.availability !== 'all' || filters.minPrice !== '' || filters.maxPrice !== '';
 
   return (
     <div className="bg-card border border-border/50 rounded-xl p-4 mb-8 shadow-[var(--shadow-card)]">
@@ -89,12 +94,39 @@ const VehicleFilters = ({ filters, onChange, years }: Props) => {
           aria-label="Ordenar"
         >
           <option value="recent">Mais recentes</option>
+          <option value="price_asc">Menor preço</option>
+          <option value="price_desc">Maior preço</option>
           <option value="year_desc">Ano: mais novo</option>
           <option value="year_asc">Ano: mais antigo</option>
           <option value="km_asc">Menor KM</option>
           <option value="km_desc">Maior KM</option>
           <option value="name_asc">Nome (A-Z)</option>
         </select>
+      </div>
+
+
+      <div className="mt-5 rounded-2xl border border-border/70 bg-muted/30 p-4">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <label className="text-sm font-bold text-primary">Faixa de preço</label>
+          <span className="text-xs text-muted-foreground">Arraste os controles ou digite os valores</span>
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <label className="text-xs font-semibold text-muted-foreground">Valor mínimo (R$)
+            <Input aria-label="Preço mínimo" inputMode="numeric" className="mt-1" placeholder="Sem mínimo" value={filters.minPrice} onChange={e => set({ minPrice: e.target.value.replace(/\D/g, '') })} />
+          </label>
+          <label className="text-xs font-semibold text-muted-foreground">Valor máximo (R$)
+            <Input aria-label="Preço máximo" inputMode="numeric" className="mt-1" placeholder="Sem máximo" value={filters.maxPrice} onChange={e => set({ maxPrice: e.target.value.replace(/\D/g, '') })} />
+          </label>
+        </div>
+        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <label className="text-xs text-muted-foreground">Mínimo: {Number(filters.minPrice || 0).toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0})}
+            <input aria-label="Ajustar preço mínimo" type="range" min={0} max={priceLimit} step={1000} className="mt-2 w-full accent-secondary" value={Math.min(Number(filters.minPrice || 0), priceLimit)} onChange={e => set({ minPrice: e.target.value === '0' ? '' : e.target.value })} />
+          </label>
+          <label className="text-xs text-muted-foreground">Máximo: {Number(filters.maxPrice || priceLimit).toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0})}
+            <input aria-label="Ajustar preço máximo" type="range" min={0} max={priceLimit} step={1000} className="mt-2 w-full accent-secondary" value={Math.min(Number(filters.maxPrice || priceLimit), priceLimit)} onChange={e => set({ maxPrice: e.target.value === String(priceLimit) ? '' : e.target.value })} />
+          </label>
+        </div>
+        {filters.minPrice && filters.maxPrice && Number(filters.minPrice) > Number(filters.maxPrice) && <p className="mt-3 text-sm text-destructive">O valor mínimo não pode superar o máximo.</p>}
       </div>
 
       {isDirty && (
@@ -108,7 +140,7 @@ const VehicleFilters = ({ filters, onChange, years }: Props) => {
   );
 };
 
-export const applyVehicleFilters = <T extends { name: string; year: number; km: number; description: string | null; created_at: string; is_sold?: boolean }>(
+export const applyVehicleFilters = <T extends { name: string; year: number; km: number; description: string | null; created_at: string; is_sold?: boolean; price?: number | null }>(
   vehicles: T[],
   filters: VehicleFilterState,
 ): T[] => {
@@ -117,6 +149,7 @@ export const applyVehicleFilters = <T extends { name: string; year: number; km: 
     if (term && !`${v.name} ${v.description ?? ''}`.toLowerCase().includes(term)) return false;
     if (filters.year && v.year !== Number(filters.year)) return false;
     if (filters.maxKm && v.km > Number(filters.maxKm)) return false;
+    if ((filters.minPrice !== '' || filters.maxPrice !== '') && (v.price == null || (filters.minPrice !== '' && v.price < Number(filters.minPrice)) || (filters.maxPrice !== '' && v.price > Number(filters.maxPrice)))) return false;
     if (filters.availability === 'sold' && !v.is_sold) return false;
     if (filters.availability === 'available' && v.is_sold) return false;
     return true;
@@ -125,6 +158,8 @@ export const applyVehicleFilters = <T extends { name: string; year: number; km: 
   list = [...list].sort((a, b) => {
     if (filters.availability === 'all' && Boolean(a.is_sold) !== Boolean(b.is_sold)) return a.is_sold ? 1 : -1;
     switch (filters.sort) {
+      case 'price_asc': return (a.price ?? Infinity) - (b.price ?? Infinity);
+      case 'price_desc': return (b.price ?? -Infinity) - (a.price ?? -Infinity);
       case 'year_desc': return b.year - a.year;
       case 'year_asc': return a.year - b.year;
       case 'km_asc': return a.km - b.km;

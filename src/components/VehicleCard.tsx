@@ -15,6 +15,7 @@ export default function VehicleCard({ vehicle, linkToDetail = false }: VehicleCa
     <div className="flex flex-col gap-3 p-6">
       <h3 className="truncate text-xl font-extrabold tracking-tight text-primary" title={vehicle.name}>{vehicle.name}</h3>
       <div className="flex flex-wrap gap-4 text-sm text-muted-foreground"><span className="inline-flex items-center gap-1.5"><CalendarDays className="h-4 w-4 text-secondary" />{vehicle.year}</span><span className="inline-flex items-center gap-1.5"><Gauge className="h-4 w-4 text-secondary" />{vehicle.km.toLocaleString('pt-BR')} km</span></div>
+      <div className="text-2xl font-black text-primary">{vehicle.price == null ? 'Consulte o valor' : vehicle.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>
       {vehicle.description && <p className="line-clamp-2 min-h-10 text-sm leading-relaxed text-muted-foreground">{vehicle.description}</p>}
       <div className="mt-2 flex items-center justify-between border-t border-border/70 pt-4"><span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{vehicle.is_sold ? 'Veículo vendido' : 'Conheça este veículo'}</span><span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white transition-colors group-hover:bg-secondary"><ArrowUpRight className="h-5 w-5" /></span></div>
     </div>

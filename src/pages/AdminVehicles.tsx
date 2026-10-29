@@ -22,7 +22,7 @@ const AdminVehicles = () => {
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Vehicle | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [form, setForm] = useState({ name: '', year: '', km: '', description: '', is_sold: false });
+  const [form, setForm] = useState({ name: '', year: '', km: '', description: '', price: '', is_sold: false });
   const [saving, setSaving] = useState(false);
   const [filters, setFilters] = useState<VehicleFilterState>(defaultFilters);
   const [page, setPage] = useState(1);
@@ -85,7 +85,7 @@ const AdminVehicles = () => {
 
   const openEdit = (v: Vehicle) => {
     setEditing(v);
-    setForm({ name: v.name, year: String(v.year), km: String(v.km), description: v.description || '', is_sold: v.is_sold });
+    setForm({ name: v.name, year: String(v.year), km: String(v.km), description: v.description || '', price: v.price == null ? '' : String(v.price), is_sold: v.is_sold });
     setImageFile(null);
     setShowForm(true);
   };
@@ -102,10 +102,13 @@ const AdminVehicles = () => {
     return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   };
 
+  const parsePrice = (raw: string) => Number(raw.trim().replace(/\./g, '').replace(',', '.'));
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
 
+    if (form.price.trim() !== '' && (!Number.isFinite(parsePrice(form.price)) || parsePrice(form.price) < 0)) { toast.error('Informe um preço válido.'); setSaving(false); return; }
     let image_url = editing?.image_url || null;
 
     if (imageFile) {
@@ -126,6 +129,7 @@ const AdminVehicles = () => {
       year: parseInt(form.year),
       km: parseInt(form.km.replace(/\D/g, '')),
       description: form.description || null,
+      price: form.price.trim() === '' ? null : parsePrice(form.price),
       image_url,
       is_sold: form.is_sold,
     };
@@ -187,6 +191,10 @@ const AdminVehicles = () => {
                   </div>
                 </div>
                 <div>
+                  <label className="text-sm font-medium text-card-foreground mb-1.5 block">Valor do veículo (R$)</label>
+                  <Input inputMode="decimal" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value.replace(/[^0-9,.]/g, "") })} placeholder="Ex: 89.900,00 (opcional)" />
+                </div>
+                <div>
                   <label className="text-sm font-medium text-card-foreground mb-1.5 block">Descrição</label>
                   <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Detalhes do veículo..." rows={3} />
                 </div>
@@ -219,7 +227,7 @@ const AdminVehicles = () => {
           </div>
         )}
 
-        <VehicleFilters filters={filters} onChange={setFilters} years={years} />
+        <VehicleFilters filters={filters} onChange={setFilters} years={years} priceLimit={Math.max(50000, Math.ceil(Math.max(...(vehicles ?? []).map(v => v.price ?? 0), 0) / 10000) * 10000)} />
 
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

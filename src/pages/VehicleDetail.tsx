@@ -109,6 +109,7 @@ const VehicleDetail = () => {
               <div className="space-y-6">
                 <div>
                   <h1 className="text-3xl md:text-5xl font-black tracking-tight text-primary mb-4">{vehicle.name}</h1>
+                  <p className="mb-4 text-3xl font-black text-primary">{vehicle.price == null ? "Consulte o valor" : vehicle.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</p>
                   {vehicle.is_sold && <p className="mb-3 font-semibold text-destructive">Este veículo já foi vendido.</p>}
                   <div className="flex flex-wrap gap-3">
                     <span className="inline-flex items-center gap-2 bg-primary text-primary-foreground text-sm font-semibold px-3 py-1.5 rounded-full">
