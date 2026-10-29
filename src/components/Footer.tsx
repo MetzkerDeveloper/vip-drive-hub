@@ -1,63 +1,37 @@
-import { Facebook, Instagram, MapPin, Phone } from 'lucide-react';
+import { ArrowUpRight, Instagram, MapPin, Phone } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import logo from '@/assets/logo-vip-veiculos.png';
 
-const financingPartners = ['Banco Santander', 'Bradesco', 'Itaú', 'BV Financeira', 'Pan'];
+const address = 'Avenida Alberto Laender, nº 276, Letra C, Bairro São Diogo, Teófilo Otoni - MG, CEP: 39803-008';
+const mapUrl = 'https://www.google.com/maps/search/?api=1&query=Avenida+Alberto+Laender+276+Letra+C+Sao+Diogo+Teofilo+Otoni+MG+39803-008';
 
-const Footer = () => {
-  return (
-    <footer className="bg-primary text-primary-foreground">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {/* Brand */}
-          <div>
-            <img src={logo} alt="Vip Veículos" className="h-14 w-auto mb-4" />
-            <p className="text-primary-foreground/70 text-sm leading-relaxed">
-              Sua concessionária de confiança. Compra, venda, troca e financiamento com as melhores condições.
-            </p>
-            <div className="flex gap-3 mt-5">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-secondary transition-colors">
-                <Facebook className="h-4 w-4" />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-secondary transition-colors">
-                <Instagram className="h-4 w-4" />
-              </a>
-            </div>
-          </div>
-
-          {/* Contact info */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Contato</h3>
-            <div className="space-y-3 text-sm text-primary-foreground/70">
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-secondary flex-shrink-0" />
-                <a href="https://www.google.com/maps/search/?api=1&query=Avenida+Alberto+Laender+276+Letra+C+Sao+Diogo+Teofilo+Otoni+MG+39803-008" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">Avenida Alberto Laender, nº 276, Letra C, Bairro São Diogo, Teófilo Otoni - MG, CEP: 39803-008</a>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-secondary flex-shrink-0" />
-                <a href="tel:+553335210184" className="hover:text-secondary transition-colors">(33) 3521-0184</a>
-              </div>
-            </div>
-          </div>
-
-          {/* Financing partners */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Parceiros de Financiamento</h3>
-            <div className="flex flex-wrap gap-2">
-              {financingPartners.map((partner) => (
-                <span key={partner} className="text-xs bg-primary-foreground/10 text-primary-foreground/80 px-3 py-1.5 rounded-full">
-                  {partner}
-                </span>
-              ))}
-            </div>
-          </div>
+export default function Footer() {
+  return <footer className="bg-[#061b31] text-white">
+    <div className="container mx-auto px-4 pb-10 pt-16 md:pt-20">
+      <div className="mb-14 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div className="lg:col-span-2">
+          <img src={logo} alt="Vip Veículos" className="mb-5 h-16 w-auto" />
+          <p className="max-w-md text-sm leading-7 text-white/65">Sua próxima conquista começa aqui. Compra, venda, troca e financiamento de veículos em Teófilo Otoni, Minas Gerais.</p>
+          <a href="tel:+553335210184" className="mt-7 inline-flex items-center gap-2 rounded-xl bg-secondary px-5 py-3 text-sm font-bold text-white transition hover:brightness-110"><Phone className="h-4 w-4" /> Falar com a loja <ArrowUpRight className="h-4 w-4" /></a>
         </div>
-
-        <div className="border-t border-primary-foreground/10 mt-10 pt-6 text-center text-xs text-primary-foreground/50">
-          © {new Date().getFullYear()} Vip Veículos. Todos os direitos reservados.
+        <div><h3 className="mb-5 text-sm font-extrabold uppercase tracking-wider">Explore</h3>
+          <nav className="flex flex-col gap-3 text-sm text-white/65">
+            <Link to="/" className="hover:text-white">Início</Link>
+            <Link to="/#veiculos" className="hover:text-white">Nosso estoque</Link>
+            <Link to="/#servicos" className="hover:text-white">Serviços</Link>
+            <Link to="/#financiamento" className="hover:text-white">Financiamento</Link>
+            <Link to="/#contato" className="hover:text-white">Contato</Link>
+          </nav>
+        </div>
+        <div><h3 className="mb-5 text-sm font-extrabold uppercase tracking-wider">Visite a VIP</h3>
+          <a href={mapUrl} target="_blank" rel="noopener noreferrer" className="mb-5 flex items-start gap-3 text-sm leading-6 text-white/65 hover:text-white"><MapPin className="mt-0.5 h-5 w-5 shrink-0 text-secondary" />{address}</a>
+          <a href="tel:+553335210184" className="flex items-center gap-3 text-sm text-white/75 hover:text-white"><Phone className="h-5 w-5 text-secondary" />(33) 3521-0184</a>
         </div>
       </div>
-    </footer>
-  );
-};
-
-export default Footer;
+      <div className="flex flex-col justify-between gap-4 border-t border-white/10 pt-7 text-xs text-white/45 sm:flex-row">
+        <p>© {new Date().getFullYear()} Vip Veículos. Todos os direitos reservados.</p>
+        <p>Teófilo Otoni · MG</p>
+      </div>
+    </div>
+  </footer>;
+}

@@ -34,16 +34,16 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contato" className="py-20 bg-background">
-      <div className="container mx-auto px-4 max-w-2xl">
-        <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center mb-4">
-          Entre em Contato
+    <section id="contato" className="bg-white py-20 md:py-28">
+      <div className="container mx-auto px-4 max-w-4xl">
+        <p className="section-eyebrow mb-4">FALE COM A VIP</p>\n        <h2 className="max-w-2xl text-3xl md:text-5xl font-black tracking-tight text-primary mb-4">
+          Vamos conversar sobre seu próximo veículo?
         </h2>
-        <p className="text-muted-foreground text-center mb-12">
+        <p className="text-muted-foreground mb-12">
           Tem interesse em algum veículo? Envie uma mensagem e retornaremos em breve.
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-5 bg-card p-8 rounded-xl shadow-[var(--shadow-card)] border border-border/50">
+        <form onSubmit={handleSubmit} className="space-y-6 rounded-3xl border border-border/70 bg-[#f6f9fc] p-5 shadow-[var(--shadow-card)] sm:p-9">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-sm font-medium text-card-foreground mb-1.5 block">Nome *</label>
@@ -73,7 +73,7 @@ const ContactSection = () => {
               type="tel"
               value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              placeholder="(11) 99999-9999"
+              placeholder="(33) 99999-9999"
               maxLength={20}
             />
           </div>

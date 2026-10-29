@@ -147,12 +147,12 @@ const AdminVehicles = () => {
   };
 
   return (
-    <div className="min-h-screen bg-muted/50">
+    <div className="min-h-screen bg-[#f2f6fb]">
       <Navbar />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground">Gestão de Veículos</h1>
+            <h1 className="text-3xl md:text-4xl font-black tracking-tight text-primary">Gestão de Veículos</h1>
             <p className="text-sm text-muted-foreground mt-1">Gerencie os anúncios e a disponibilidade do estoque.</p>
           </div>
           <Button onClick={openNew}><Plus className="h-4 w-4" /> Novo Veículo</Button>
@@ -161,7 +161,7 @@ const AdminVehicles = () => {
         {/* Form modal */}
         {showForm && (
           <div className="fixed inset-0 z-50 bg-foreground/50 flex items-center justify-center p-4">
-            <div className="bg-card rounded-xl p-6 w-full max-w-lg shadow-xl border border-border/50 max-h-[90vh] overflow-y-auto">
+            <div className="bg-card rounded-3xl p-6 w-full max-w-lg shadow-2xl border border-border/50 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-card-foreground">{editing ? 'Editar Veículo' : 'Novo Veículo'}</h2>
                 <button onClick={() => setShowForm(false)} className="text-muted-foreground hover:text-foreground"><X className="h-5 w-5" /></button>

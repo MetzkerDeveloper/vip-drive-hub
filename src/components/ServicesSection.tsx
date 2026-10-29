@@ -1,39 +1,23 @@
-import { Car, ArrowLeftRight, Banknote, ShieldCheck } from 'lucide-react';
-
+import { ArrowLeftRight, BadgeCheck, Banknote, CarFront } from 'lucide-react';
 const services = [
-  { icon: Car, title: 'Compra', description: 'Encontre o veículo ideal com as melhores condições.' },
-  { icon: Banknote, title: 'Venda', description: 'Avaliamos e compramos seu veículo de forma rápida e segura.' },
-  { icon: ArrowLeftRight, title: 'Troca', description: 'Troque seu carro usado por um seminovo com facilidade.' },
-  { icon: ShieldCheck, title: 'Financiamento', description: 'Parcelas que cabem no seu bolso com aprovação facilitada.' },
+  { icon: CarFront, title: 'Compra', description: 'Encontre seu próximo veículo com atendimento personalizado.' },
+  { icon: Banknote, title: 'Venda', description: 'Converse com nossa equipe para avaliar seu veículo.' },
+  { icon: ArrowLeftRight, title: 'Troca', description: 'Descubra possibilidades para trocar seu veículo atual.' },
+  { icon: BadgeCheck, title: 'Financiamento', description: 'Conheça opções de financiamento com nossa equipe.' },
 ];
-
-const ServicesSection = () => {
+export default function ServicesSection() {
   return (
-    <section className="py-20 bg-background">
+    <section id="servicos" className="bg-white py-20 md:py-28">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-foreground text-center mb-4">
-          Nossos Serviços
-        </h2>
-        <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
-          Oferecemos soluções completas para você realizar o melhor negócio.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((service) => (
-            <div
-              key={service.title}
-              className="group bg-card rounded-xl p-6 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-1 border border-border/50"
-            >
-              <div className="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center mb-4 group-hover:bg-secondary/20 transition-colors">
-                <service.icon className="h-6 w-6 text-secondary" />
-              </div>
-              <h3 className="text-lg font-semibold text-card-foreground mb-2">{service.title}</h3>
-              <p className="text-sm text-muted-foreground">{service.description}</p>
-            </div>
-          ))}
+        <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div><span className="section-eyebrow">O QUE FAZEMOS</span><h2 className="mt-4 max-w-2xl text-3xl font-black tracking-tight text-primary md:text-5xl">Seu próximo negócio começa com <span className="text-secondary">boas escolhas.</span></h2></div>
+          <p className="max-w-sm text-base leading-relaxed text-muted-foreground">Compra, venda, troca e financiamento. Tudo em um só lugar, com atenção ao que você precisa.</p>
         </div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{services.map((service, index) => <div key={service.title} className="premium-card group p-7">
+          <div className={`mb-8 flex h-14 w-14 items-center justify-center rounded-2xl ${index === 1 ? 'bg-red-50 text-secondary' : 'bg-sky-50 text-sky-700'} transition-transform group-hover:scale-110`}><service.icon className="h-7 w-7" /></div>
+          <h3 className="mb-3 text-xl font-extrabold text-primary">{service.title}</h3><p className="text-sm leading-relaxed text-muted-foreground">{service.description}</p>
+        </div>)}</div>
       </div>
     </section>
   );
-};
-
-export default ServicesSection;
+}
