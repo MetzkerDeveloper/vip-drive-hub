@@ -9,6 +9,7 @@ const links = [
   { label: 'Início', to: '/' },
   { label: 'Veículos', to: '/#veiculos' },
   { label: 'Serviços', to: '/#servicos' },
+  { label: 'Financiamento', to: '/#financiamento' },
   { label: 'Contato', to: '/#contato' },
 ];
 
