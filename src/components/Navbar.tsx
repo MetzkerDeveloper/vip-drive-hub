@@ -41,6 +41,13 @@ const Navbar = () => {
     return () => window.cancelAnimationFrame(frame);
   }, [location.pathname, location.hash]);
 
+  const goToSection = (id: string) => {
+    if (location.pathname === '/' && location.hash === '#' + id) {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    setIsOpen(false);
+  };
+
   return (
     <nav className="sticky top-0 z-50 bg-primary shadow-lg">
       <div className="container mx-auto px-4">
@@ -52,8 +59,8 @@ const Navbar = () => {
           {/* Desktop */}
           <div className="hidden md:flex items-center gap-8">
             <Link to="/" className={navLinkClass('/')}>Home</Link>
-            <Link to="/#veiculos" className={navLinkClass('/#veiculos')}>Veículos</Link>
-            <Link to="/#contato" className={navLinkClass('/#contato')}>Contato</Link>
+            <Link to="/#veiculos" onClick={() => goToSection("veiculos")} className={navLinkClass('/#veiculos')}>Veículos</Link>
+            <Link to="/#contato" onClick={() => goToSection("contato")} className={navLinkClass('/#contato')}>Contato</Link>
             {isAdmin && (
               <>
                 <Link to="/admin/vehicles" className={navLinkClass('/admin/vehicles')}>Veículos (admin)</Link>
@@ -75,8 +82,8 @@ const Navbar = () => {
         {isOpen && (
           <div className="md:hidden pb-4 space-y-3 animate-in slide-in-from-top-2">
             <Link to="/" className="block text-primary-foreground/80 hover:text-secondary py-1" onClick={() => setIsOpen(false)}>Home</Link>
-            <Link to="/#veiculos" className="block text-primary-foreground/80 hover:text-secondary py-1" onClick={() => setIsOpen(false)}>Veículos</Link>
-            <Link to="/#contato" className="block text-primary-foreground/80 hover:text-secondary py-1" onClick={() => setIsOpen(false)}>Contato</Link>
+            <Link to="/#veiculos" className="block text-primary-foreground/80 hover:text-secondary py-1" onClick={() => goToSection("veiculos")}>Veículos</Link>
+            <Link to="/#contato" className="block text-primary-foreground/80 hover:text-secondary py-1" onClick={() => goToSection("contato")}>Contato</Link>
             {isAdmin && (
               <>
                 <Link to="/admin/vehicles" className="block text-primary-foreground/80 hover:text-secondary py-1" onClick={() => setIsOpen(false)}>Veículos (admin)</Link>
