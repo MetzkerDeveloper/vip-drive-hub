@@ -25,7 +25,7 @@ const Navbar = () => {
     setIsAdmin(false);
   };
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => location.pathname + location.hash === path || (path === '/' && location.pathname === '/' && !location.hash);
 
   const navLinkClass = (path: string) =>
     `text-sm font-medium transition-colors duration-200 ${
@@ -33,6 +33,13 @@ const Navbar = () => {
         ? 'text-secondary'
         : 'text-primary-foreground/80 hover:text-secondary'
     }`;
+
+  useEffect(() => {
+    if (location.pathname !== '/' || !location.hash) return;
+    const id = decodeURIComponent(location.hash.slice(1));
+    const frame = window.requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    return () => window.cancelAnimationFrame(frame);
+  }, [location.pathname, location.hash]);
 
   return (
     <nav className="sticky top-0 z-50 bg-primary shadow-lg">
