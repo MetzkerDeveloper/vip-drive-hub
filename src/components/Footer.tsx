@@ -1,4 +1,4 @@
-import { Facebook, Instagram, MapPin, Phone, Mail } from 'lucide-react';
+import { Facebook, Instagram, MapPin, Phone } from 'lucide-react';
 import logo from '@/assets/logo-vip-veiculos.png';
 
 const financingPartners = ['Banco Santander', 'Bradesco', 'Itaú', 'BV Financeira', 'Pan'];
@@ -30,15 +30,11 @@ const Footer = () => {
             <div className="space-y-3 text-sm text-primary-foreground/70">
               <div className="flex items-center gap-2">
                 <MapPin className="h-4 w-4 text-secondary flex-shrink-0" />
-                <span>Av. Principal, 1000 - Centro</span>
+                <a href="https://www.google.com/maps/search/?api=1&query=Avenida+Alberto+Laender+276+Letra+C+Sao+Diogo+Teofilo+Otoni+MG+39803-008" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors">Avenida Alberto Laender, nº 276, Letra C, Bairro São Diogo, Teófilo Otoni - MG, CEP: 39803-008</a>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-secondary flex-shrink-0" />
-                <span>(11) 99999-9999</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-secondary flex-shrink-0" />
-                <span>contato@vipveiculos.com.br</span>
+                <a href="tel:+553335210184" className="hover:text-secondary transition-colors">(33) 3521-0184</a>
               </div>
             </div>
           </div>
