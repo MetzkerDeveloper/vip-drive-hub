@@ -51,6 +51,7 @@ const VehicleDetail = () => {
       {
         name: form.name,
         email: form.email,
+        phone: form.phone,
         message: form.message,
         vehicle_interest: vehicle ? `${vehicle.name} ${vehicle.year}` : null,
       },
@@ -60,7 +61,7 @@ const VehicleDetail = () => {
       toast.error('Erro ao enviar. Tente novamente.');
     } else {
       toast.success('Mensagem enviada com sucesso!');
-      setForm({ name: '', email: '', message: '' });
+      setForm({ name: '', email: '', phone: '', message: '' });
     }
   };
 
