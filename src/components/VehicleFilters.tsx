@@ -112,10 +112,10 @@ const VehicleFilters = ({ filters, onChange, years, priceLimit = 500000 }: Props
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <label className="text-xs font-semibold text-muted-foreground">Valor mínimo (R$)
-            <Input aria-label="Preço mínimo" inputMode="numeric" className="mt-1" placeholder="Sem mínimo" value={filters.minPrice} onChange={e => set({ minPrice: e.target.value.replace(/\\D/g, '') })} />
+            <Input aria-label="Preço mínimo" inputMode="numeric" className="mt-1" placeholder="Sem mínimo" value={filters.minPrice} onChange={e => set({ minPrice: e.target.value.replace(/\D/g, '') })} />
           </label>
           <label className="text-xs font-semibold text-muted-foreground">Valor máximo (R$)
-            <Input aria-label="Preço máximo" inputMode="numeric" className="mt-1" placeholder="Sem máximo" value={filters.maxPrice} onChange={e => set({ maxPrice: e.target.value.replace(/\\D/g, '') })} />
+            <Input aria-label="Preço máximo" inputMode="numeric" className="mt-1" placeholder="Sem máximo" value={filters.maxPrice} onChange={e => set({ maxPrice: e.target.value.replace(/\D/g, '') })} />
           </label>
         </div>
         <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
