@@ -12,7 +12,8 @@ const Navbar = () => {
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsAdmin(!!session);
+      if (!session) { setIsAdmin(false); return; }
+      void supabase.from('admin_users').select('user_id').maybeSingle().then(({ data, error }) => setIsAdmin(!error && !!data));
     });
     supabase.auth.getSession().then(({ data: { session } }) => {
       setIsAdmin(!!session);
