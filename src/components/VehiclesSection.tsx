@@ -8,7 +8,7 @@ import VehicleFilters, { applyVehicleFilters, defaultFilters, type VehicleFilter
 import PaginationControls from './PaginationControls';
 import { Car } from 'lucide-react';
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 3;
 
 const VehiclesSection = () => {
   const [filters, setFilters] = useState<VehicleFilterState>(defaultFilters);
