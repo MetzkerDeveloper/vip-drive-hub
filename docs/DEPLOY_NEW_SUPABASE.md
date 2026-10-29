@@ -11,7 +11,7 @@
 
 ## Pré-requisitos de publicação
 1. Configurar o primeiro usuário administrativo em **Supabase > Authentication > Users** (não há usuários migrados).
-2. **Antes de ativar o cadastro/login publicamente, restringir autorização administrativa a uma lista de administradores.** As políticas legadas presentes no projeto permitem escrita a qualquer usuário autenticado; não são adequadas para um sistema em produção com inscrição pública. Não habilitar cadastro aberto.
+2. O controle de acesso foi reforçado na migration `restrict_admin_operations_to_allowlisted_users`. Depois de criar o usuário em Authentication > Users, copie o UUID do usuário e adicione-o no SQL Editor: `INSERT INTO public.admin_users(user_id) VALUES ('UUID_DO_USUARIO');`. Nunca coloque um UUID fictício. Somente usuários dessa tabela conseguem acessar as operações administrativas. Não habilitar cadastro aberto.
 3. Validar `npm ci`, `npm run build`, `npm test`, `npm run lint`.
 4. Validar login, logout, upload de imagens, cadastro/edição e marcação vendido/disponível, filtro, formulário de contatos e navegação mobile.
 5. Somente após os testes, mesclar o PR para a branch `main` e atualizar o deployment que usa essa branch.
