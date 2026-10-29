@@ -2,7 +2,7 @@ import { ArrowRight, BadgeCheck, CreditCard } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function FinancingSection() {
-  return <section className="bg-[#061b31] py-20 text-white md:py-24">
+  return <section id="financiamento" className="bg-[#061b31] py-20 text-white md:py-24">
     <div className="container mx-auto grid items-center gap-10 px-4 lg:grid-cols-2 lg:gap-20">
       <div>
         <p className="mb-4 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-sky-300"><span className="h-1 w-8 rounded-full bg-secondary" /> FINANCIAMENTO</p>
