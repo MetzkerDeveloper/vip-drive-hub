@@ -51,6 +51,7 @@ export type Database = {
           id: string
           image_url: string | null
           km: number
+          is_sold: boolean
           name: string
           updated_at: string
           year: number
@@ -61,6 +62,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           km?: number
+          is_sold?: boolean
           name: string
           updated_at?: string
           year: number
@@ -71,6 +73,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           km?: number
+          is_sold?: boolean
           name?: string
           updated_at?: string
           year?: number
