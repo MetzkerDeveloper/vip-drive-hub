@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { Contact } from '@/types/database';
 import Navbar from '@/components/Navbar';
-import { Mail, User, Car, MessageSquare, Calendar } from 'lucide-react';
+import { Mail, User, Car, MessageSquare, Calendar, Phone } from 'lucide-react';
 
 const AdminContacts = () => {
   const navigate = useNavigate();

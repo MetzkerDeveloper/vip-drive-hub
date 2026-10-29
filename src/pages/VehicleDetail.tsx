@@ -137,6 +137,10 @@ const VehicleDetail = () => {
                     </div>
                   </div>
                   <div>
+                    <label className="text-sm font-medium text-card-foreground mb-1.5 block">Telefone</label>
+                    <Input type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="(11) 99999-9999" maxLength={20} />
+                  </div>
+                  <div>
                     <label className="text-sm font-medium text-card-foreground mb-1.5 block">Mensagem *</label>
                     <Textarea value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} rows={4} maxLength={1000} required />
                   </div>
