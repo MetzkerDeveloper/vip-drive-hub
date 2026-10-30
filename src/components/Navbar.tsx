@@ -53,8 +53,8 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#051b33]/95 text-white shadow-xl shadow-black/10 backdrop-blur-xl">
       <div className="container mx-auto flex min-h-[80px] items-center justify-between gap-4 px-4">
-        <Link to="/" onClick={() => navigateTo('/')} className="inline-flex shrink-0 items-center rounded-xl border border-white/15 bg-white/10 px-3 py-1.5 shadow-[0_8px_24px_rgba(0,0,0,0.2)] transition-colors hover:bg-white/15" aria-label="Vip Veículos, início">
-          <img src={logo} alt="Vip Veículos" className="h-12 w-auto max-w-[160px] object-contain drop-shadow-[0_3px_7px_rgba(255,255,255,0.35)] sm:h-14" />
+        <Link to="/" onClick={() => navigateTo('/')} className="group inline-flex shrink-0 items-center py-2 pr-3 transition-opacity hover:opacity-90" aria-label="Vip Veículos, início">
+          <img src={logo} alt="Vip Veículos" className="h-12 w-auto max-w-[160px] object-contain brightness-125 drop-shadow-[0_0_7px_rgba(125,202,255,0.22)] transition-all duration-300 group-hover:brightness-150 sm:h-14" />
         </Link>
         <nav aria-label="Navegação principal" className="hidden items-center gap-1 lg:flex">{menu()}</nav>
         <div className="hidden items-center gap-3 md:flex">
