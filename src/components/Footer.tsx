@@ -10,7 +10,9 @@ export default function Footer() {
     <div className="container mx-auto px-4 pb-10 pt-16 md:pt-20">
       <div className="mb-14 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
         <div className="lg:col-span-2">
-          <img src={logo} alt="Vip Veículos" className="mb-5 h-16 w-auto" />
+          <div className="mb-6 inline-flex items-center rounded-2xl border border-white/15 bg-white/10 px-5 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.25)]">
+            <img src={logo} alt="Vip Veículos" className="h-20 w-auto max-w-[220px] object-contain drop-shadow-[0_4px_10px_rgba(255,255,255,0.35)]" />
+          </div>
           <p className="max-w-md text-sm leading-7 text-white/65">Sua próxima conquista começa aqui. Compra, venda, troca e financiamento de veículos em Teófilo Otoni, Minas Gerais.</p>
           <a href="tel:+553335210184" className="mt-7 inline-flex items-center gap-2 rounded-xl bg-secondary px-5 py-3 text-sm font-bold text-white transition hover:brightness-110"><Phone className="h-4 w-4" /> Falar com a loja <ArrowUpRight className="h-4 w-4" /></a>
         </div>
