@@ -61,6 +61,7 @@ export default function Navbar() {
           <a className="hidden items-center gap-2 text-xs font-bold text-white/85 transition hover:text-white xl:flex" href="tel:+553335210184"><Phone className="h-4 w-4 text-sky-300" />(33) 3521-0184</a>
           {canManageUsers && <Link to="/admin/users" className="rounded-lg px-3 py-2 text-xs font-bold text-white/85 hover:text-white">Usuários</Link>}
           {isAdmin && <Link to="/admin/vehicles" className="rounded-lg px-3 py-2 text-xs font-bold text-white/85 hover:text-white">Painel</Link>}
+          {isAdmin && <Link to="/admin/contacts" className="rounded-lg px-3 py-2 text-xs font-bold text-white/85 hover:text-white">Interessados</Link>}
           {isAdmin && <Button variant="ghost" size="icon" onClick={signOut} title="Sair" className="text-white hover:bg-white/10 hover:text-white"><LogOut className="h-4 w-4" /></Button>}
           <Link to="/#veiculos" onClick={() => navigateTo('/#veiculos')} className="inline-flex items-center gap-2 rounded-xl bg-secondary px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-secondary/20 transition hover:brightness-110">Ver estoque <ArrowUpRight className="h-4 w-4" /></Link>
         </div>
@@ -70,7 +71,7 @@ export default function Navbar() {
         <div className="container mx-auto space-y-1">{menu(true)}
           <a href="tel:+553335210184" className="flex items-center gap-2 rounded-lg px-3 py-3 text-sm text-white/85"><Phone className="h-4 w-4" />(33) 3521-0184</a>
           {canManageUsers && <Link to="/admin/users" onClick={() => setOpen(false)} className="block px-3 py-2 text-sm">Usuários</Link>}
-          {isAdmin && <><Link to="/admin/vehicles" onClick={() => setOpen(false)} className="block px-3 py-2 text-sm">Administrar veículos</Link><Link to="/admin/contacts" onClick={() => setOpen(false)} className="block px-3 py-2 text-sm">Mensagens</Link><button onClick={signOut} className="px-3 py-2 text-sm">Sair</button></>}
+          {isAdmin && <><Link to="/admin/vehicles" onClick={() => setOpen(false)} className="block px-3 py-2 text-sm">Administrar veículos</Link><Link to="/admin/contacts" onClick={() => setOpen(false)} className="block px-3 py-2 text-sm">Interessados / Mensagens</Link><button onClick={signOut} className="px-3 py-2 text-sm">Sair</button></>}
         </div>
       </nav>}
     </header>
