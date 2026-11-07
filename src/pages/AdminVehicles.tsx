@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { Vehicle } from '@/types/database';
@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
-import { Plus, Pencil, Trash2, X, Loader2, Upload, ToggleLeft, ToggleRight } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Loader2, Upload, ToggleLeft, ToggleRight, MessageSquare } from 'lucide-react';
 import VehicleCard from '@/components/VehicleCard';
 import VehicleCardSkeleton from '@/components/VehicleCardSkeleton';
 import VehicleFilters, { applyVehicleFilters, defaultFilters, type VehicleFilterState } from '@/components/VehicleFilters';
@@ -26,6 +26,15 @@ const AdminVehicles = () => {
   const [saving, setSaving] = useState(false);
   const [filters, setFilters] = useState<VehicleFilterState>(defaultFilters);
   const [page, setPage] = useState(1);
+  const { data: interestedCount } = useQuery({
+    queryKey: ['admin-interested-count'],
+    queryFn: async () => {
+      const { count, error } = await supabase.from('contacts').select('id', { count: 'exact', head: true });
+      if (error) throw error;
+      return count ?? 0;
+    },
+    refetchInterval: 60_000,
+  });
 
 
   useEffect(() => {
@@ -159,7 +168,15 @@ const AdminVehicles = () => {
             <h1 className="text-3xl md:text-4xl font-black tracking-tight text-primary">Gestão de Veículos</h1>
             <p className="text-sm text-muted-foreground mt-1">Gerencie os anúncios e a disponibilidade do estoque.</p>
           </div>
-          <Button onClick={openNew}><Plus className="h-4 w-4" /> Novo Veículo</Button>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button asChild variant="outline" className="gap-2 border-primary/20 bg-white text-primary hover:bg-primary/5">
+              <Link to="/admin/contacts">
+                <MessageSquare className="h-4 w-4" />
+                Interessados {interestedCount !== undefined && <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-white">{interestedCount}</span>}
+              </Link>
+            </Button>
+            <Button onClick={openNew}><Plus className="h-4 w-4" /> Novo Veículo</Button>
+          </div>
         </div>
 
         {/* Form modal */}
