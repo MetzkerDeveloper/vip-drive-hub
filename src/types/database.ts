@@ -5,6 +5,7 @@ export interface Vehicle {
   km: number;
   description: string | null;
   image_url: string | null;
+  image_urls: string[];
   is_sold: boolean;
   price: number | null;
   created_at: string;

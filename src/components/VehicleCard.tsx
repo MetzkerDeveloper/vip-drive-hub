@@ -1,12 +1,14 @@
 import { ArrowUpRight, CalendarDays, Car, Gauge } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { Vehicle } from '@/types/database';
+import { getVehicleImages } from '@/lib/vehicle-images';
 import SoldRibbon from './SoldRibbon';
 interface VehicleCardProps { vehicle: Vehicle; linkToDetail?: boolean }
 export default function VehicleCard({ vehicle, linkToDetail = false }: VehicleCardProps) {
+  const coverImage = getVehicleImages(vehicle)[0];
   const content = <article className="premium-card group h-full overflow-hidden">
     <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
-      {vehicle.image_url ? <img src={vehicle.image_url} alt={vehicle.name} loading="lazy" className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 ${vehicle.is_sold ? 'grayscale-[45%]' : ''}`} />
+      {coverImage ? <img src={coverImage} alt={vehicle.name} loading="lazy" className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 ${vehicle.is_sold ? 'grayscale-[45%]' : ''}`} />
       : <div className="flex h-full flex-col items-center justify-center gap-2 text-slate-400"><Car className="h-12 w-12" /><span className="text-sm">Foto em breve</span></div>}
       {vehicle.is_sold && <SoldRibbon />}
       <span className="absolute right-4 top-4 rounded-full bg-primary/90 px-3 py-1.5 text-xs font-extrabold text-white backdrop-blur-sm">{vehicle.year}</span>
