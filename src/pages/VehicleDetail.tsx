@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { Vehicle } from '@/types/database';
+import { getVehicleImages } from '@/lib/vehicle-images';
 import SoldRibbon from '@/components/SoldRibbon';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -11,11 +12,12 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
-import { ArrowLeft, Car, Calendar, Gauge, Send, Loader2 } from 'lucide-react';
+import { ArrowLeft, Car, Calendar, ChevronLeft, ChevronRight, Gauge, Images, Send, Loader2 } from 'lucide-react';
 
 const VehicleDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(false);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
 
   const { data: vehicle, isLoading, isError } = useQuery({
@@ -27,9 +29,11 @@ const VehicleDetail = () => {
     },
     enabled: !!id,
   });
+  const vehicleImages = useMemo(() => vehicle ? getVehicleImages(vehicle) : [], [vehicle]);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
+    setActiveImageIndex(0);
   }, [id]);
 
   useEffect(() => {
@@ -95,15 +99,58 @@ const VehicleDetail = () => {
               <div className="premium-card overflow-hidden">
                 <div className="relative aspect-[4/3] bg-muted overflow-hidden">
                   {vehicle.is_sold && <SoldRibbon />}
-                  {vehicle.image_url ? (
-                    <img src={vehicle.image_url} alt={vehicle.name} className="w-full h-full object-cover" loading="lazy" />
+                  {vehicleImages[activeImageIndex] ? (
+                    <img
+                      src={vehicleImages[activeImageIndex]}
+                      alt={`${vehicle.name} — foto ${activeImageIndex + 1} de ${vehicleImages.length}`}
+                      className="h-full w-full object-cover"
+                    />
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground">
                       <Car className="h-14 w-14 mb-2" />
                       <span className="text-sm font-medium">Foto em breve</span>
                     </div>
                   )}
+                  {vehicleImages.length > 1 && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => setActiveImageIndex((current) => (current - 1 + vehicleImages.length) % vehicleImages.length)}
+                        className="absolute left-3 top-1/2 z-20 -translate-y-1/2 rounded-full bg-white/90 p-2.5 text-primary shadow-lg backdrop-blur-sm transition hover:bg-white"
+                        aria-label="Ver foto anterior"
+                      >
+                        <ChevronLeft className="h-5 w-5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setActiveImageIndex((current) => (current + 1) % vehicleImages.length)}
+                        className="absolute right-3 top-1/2 z-20 -translate-y-1/2 rounded-full bg-white/90 p-2.5 text-primary shadow-lg backdrop-blur-sm transition hover:bg-white"
+                        aria-label="Ver próxima foto"
+                      >
+                        <ChevronRight className="h-5 w-5" />
+                      </button>
+                      <span className="absolute bottom-3 right-3 z-20 inline-flex items-center gap-1.5 rounded-full bg-primary/85 px-3 py-1.5 text-xs font-bold text-white backdrop-blur-sm">
+                        <Images className="h-3.5 w-3.5" /> {activeImageIndex + 1}/{vehicleImages.length}
+                      </span>
+                    </>
+                  )}
                 </div>
+                {vehicleImages.length > 1 && (
+                  <div className="flex gap-2 overflow-x-auto p-3" aria-label="Miniaturas das fotos do veículo">
+                    {vehicleImages.map((imageUrl, index) => (
+                      <button
+                        key={imageUrl}
+                        type="button"
+                        onClick={() => setActiveImageIndex(index)}
+                        className={`relative h-20 w-24 shrink-0 overflow-hidden rounded-lg border-2 transition ${index === activeImageIndex ? 'border-secondary ring-2 ring-secondary/20' : 'border-transparent opacity-70 hover:opacity-100'}`}
+                        aria-label={`Ver foto ${index + 1}`}
+                        aria-current={index === activeImageIndex ? 'true' : undefined}
+                      >
+                        <img src={imageUrl} alt="" className="h-full w-full object-cover" loading="lazy" />
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="space-y-6">
