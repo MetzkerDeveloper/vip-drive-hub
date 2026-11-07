@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { Contact } from '@/types/database';
 import Navbar from '@/components/Navbar';
-import { Mail, User, Car, MessageSquare, Calendar, Phone } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Mail, User, Car, MessageSquare, Calendar, Phone, RefreshCw, ArrowLeft } from 'lucide-react';
 
 const AdminContacts = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const AdminContacts = () => {
     });
   }, [navigate]);
 
-  const { data: contacts, isLoading } = useQuery({
+  const { data: contacts, isLoading, isError, error, refetch, isFetching } = useQuery({
     queryKey: ['admin-contacts'],
     queryFn: async () => {
       const { data, error } = await supabase.from('contacts').select('*').order('created_at', { ascending: false });
@@ -34,7 +35,17 @@ const AdminContacts = () => {
     <div className="min-h-screen bg-muted/50">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-foreground mb-8">Contatos Recebidos</h1>
+        <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <Link to="/admin/vehicles" className="mb-3 inline-flex items-center gap-2 text-sm font-semibold text-secondary hover:underline"><ArrowLeft className="h-4 w-4" /> Voltar ao painel</Link>
+            <h1 className="text-3xl font-black text-primary">Interessados e mensagens</h1>
+            <p className="mt-1 text-sm text-muted-foreground">Solicitações recebidas pelos formulários do site, com veículo de interesse e dados de contato.</p>
+          </div>
+          <Button type="button" variant="outline" disabled={isFetching} onClick={() => void refetch()}>
+            <RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
+            Atualizar
+          </Button>
+        </div>
 
         {isLoading ? (
           <div className="space-y-4">
@@ -45,6 +56,12 @@ const AdminContacts = () => {
                 <div className="h-3 bg-muted rounded w-full" />
               </div>
             ))}
+          </div>
+        ) : isError ? (
+          <div role="alert" className="rounded-2xl border border-destructive/20 bg-card p-8 text-center">
+            <p className="font-semibold text-destructive">Não foi possível carregar os interessados.</p>
+            <p className="mt-2 text-sm text-muted-foreground">{error instanceof Error ? error.message : 'Verifique sua conexão e tente novamente.'}</p>
+            <Button className="mt-5" variant="outline" onClick={() => void refetch()}>Tentar novamente</Button>
           </div>
         ) : contacts && contacts.length > 0 ? (
           <div className="space-y-4">
@@ -84,7 +101,11 @@ const AdminContacts = () => {
             ))}
           </div>
         ) : (
-          <p className="text-center text-muted-foreground py-16">Nenhum contato recebido.</p>
+          <div className="rounded-2xl border border-border/70 bg-card px-6 py-16 text-center">
+            <MessageSquare className="mx-auto mb-4 h-12 w-12 text-muted-foreground/40" />
+            <p className="font-semibold text-primary">Nenhum interessado registrado ainda.</p>
+            <p className="mt-2 text-sm text-muted-foreground">Quando alguém enviar o formulário de interesse de um veículo ou a mensagem de contato, o registro aparecerá aqui.</p>
+          </div>
         )}
       </div>
     </div>
